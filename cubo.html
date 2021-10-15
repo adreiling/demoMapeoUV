@@ -57,6 +57,28 @@
 
        */
 
+       
+       // La textura tiene 16 cuadros de igual tamaño distribuidos en 4 filas y 4 columnas, por ende escalo para que
+       //  podamos observar un cuadro entero en una cara del cubo
+       auxUv.x *= 1.0/4.0;
+       auxUv.y *= 1.0/4.0;
+
+       
+       // Vamos posicionandonos en cada cuadro de la textura para proyectar sobre las caras del cubo, empezando
+       //  por el primer cuadro arriba a la izquierda en la textura y desplazandonos de a saltos de 0.25 a la derecha (en x) y luego
+       //  bajando saltos de 0.25 (en y) cada 4 desplazamientos en x
+
+       float salto = 0.25;
+       
+       // Posicion inicial de primer cuadro:
+       auxUv.y += 3.0*salto;
+
+       // Desplazo segun variable t
+       // Debo desplazarme de a multiplos de 0.25 (salto) entre 0 y 4 veces, entonces mapeo variable t usando modulo
+       auxUv.x += salto * mod(floor(t), 4.0);
+       auxUv.y -= salto * mod(floor(t/4.0), 4.0);
+
+
        vUv = auxUv;
        gl_Position = projectionMatrix * modelViewMatrix * aux;
        
